@@ -1,13 +1,14 @@
-package TestCase;
+package BrowserAutomationController;
 
+import BrowserAutomationController.BrowsersType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.Test;
 
-import static TestCase.SystemProperty.CHROME;
-import static TestCase.SystemProperty.CHROME_DRIVER;
-import static TestCase.SystemProperty.CHROME_DRIVER_ADDRESS;
+import static BrowserAutomationController.SystemProperty.CHROME;
+import static BrowserAutomationController.SystemProperty.CHROME_DRIVER;
+import static BrowserAutomationController.SystemProperty.CHROME_DRIVER_ADDRESS;
 
 public class WebDriverController {
 
@@ -30,19 +31,6 @@ public class WebDriverController {
     }
 
 
-    public static void main( String[] args ) throws InterruptedException {
-        BrowsersType browsersType = new BrowsersType();
-        browsersType.setBrowsersType("chrome");
-        browsersType.setUrl("https://www.baidu.com/");
-        startBrowser(browsersType);
-        if (driver!=null){
-            System.out.println(driver.getTitle());
-            driver.findElement(By.id("kw")).sendKeys("bilibili");
-            driver.findElement(By.id("su")).click();
-            Thread.sleep(3000);
-            driver.quit();
-        }
-    }
 
     @Test
     public void startBroswerTest() throws InterruptedException {

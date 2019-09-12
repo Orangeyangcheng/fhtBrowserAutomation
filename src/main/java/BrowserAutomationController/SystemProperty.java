@@ -1,4 +1,4 @@
-package TestCase;
+package BrowserAutomationController;
 
 public final class SystemProperty {
     /**

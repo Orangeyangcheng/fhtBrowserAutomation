@@ -1,4 +1,4 @@
-package TestCase;
+package BrowserAutomationController;
 
 public class BrowsersType {
     /**
