@@ -1,7 +1,7 @@
 package BrowserAutomationController;
 
-import BrowserAutomationController.BrowsersType;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.Test;
@@ -15,29 +15,63 @@ public class WebDriverController {
     public static WebDriver driver = null;
 
 
-    public static WebDriver startBrowser(BrowsersType browsersType){
+    public static void startBrowser(TestConfig testConfig){
 
-        if (browsersType.getBrowsersType()!= null && browsersType.getBrowsersType() == CHROME) {
-            browsersType.setWebDriverAddress(CHROME_DRIVER_ADDRESS);
-            System.setProperty(CHROME_DRIVER,browsersType.getWebDriverAddress());
+        if (testConfig.getBrowsersType()!= null && testConfig.getBrowsersType() == CHROME) {
+            testConfig.setWebDriverAddress(CHROME_DRIVER_ADDRESS);
+            System.setProperty(CHROME_DRIVER,testConfig.getWebDriverAddress());
             driver = new ChromeDriver();
-            driver.get(browsersType.getUrl());
+            setScreenSize(testConfig);
+            driver.get(testConfig.getUrl());
+
         }
         else {
             System.out.println("还不支持其它浏览器哦~~~");
         }
 
-        return driver;
+    }
+
+    private static void setScreenSize(TestConfig testConfig){
+        switch (testConfig.getScreenSize()){
+            case 0:
+                break;
+            case 1:
+                System.out.println("浏览器全屏幕尺寸显示");
+                driver.manage().window().fullscreen();
+                break;
+            case 2:
+                System.out.println("浏览器最大化尺寸显示");
+                driver.manage().window().maximize();
+                break;
+            case 3:
+                if (testConfig.getScreenHeight()!=0&&testConfig.getScreenSize()!=0){
+                    Dimension dimension = new Dimension(testConfig.getScreenWidth(),testConfig.getScreenHeight());
+                    System.out.println("浏览器按"+dimension.getWidth()+"*"+dimension.getHeight()+"尺寸显示");
+                    driver.manage().window().setSize(dimension);
+                }
+                else {
+                    return;
+                }
+                break;
+            default:
+                break;
+        }
+
+
+
     }
 
 
 
     @Test
     public void startBroswerTest() throws InterruptedException {
-        BrowsersType browsersType = new BrowsersType();
-        browsersType.setBrowsersType("chrome");
-        browsersType.setUrl("https://www.baidu.com/");
-        startBrowser(browsersType);
+        TestConfig testConfig = new TestConfig();
+        testConfig.setBrowsersType("chrome");
+        testConfig.setUrl("https://www.baidu.com/");
+        testConfig.setScreenSize(3);
+        testConfig.setScreenHeight(1000);
+        testConfig.setScreenWidth(1000);
+        startBrowser(testConfig);
         if (driver!=null){
             System.out.println(driver.getTitle());
             driver.findElement(By.xpath("//*[@id=\"kw\"]")).sendKeys("bilibili");
